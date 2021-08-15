@@ -15,12 +15,10 @@ class ResourceOperations:
     @staticmethod
     def request_to_list(link):
         limit = '&limit=1000000'
+
         json_dict = requests.get(link+limit).json()
-        print('working on: ' + link +' of length: '+ str(len(json_dict['result']['records'])))
-        if len(json_dict['result']['records']) > 30:
-            return json_dict['result']['records']
-        else:
-            return []
+        print('of length: ' + str(len(json_dict['result']['records'])))
+        return json_dict['result']['records']
 
     #iterates through resource id's, calls API to retrive data, and combines all resources
     #into one large JSON
@@ -28,6 +26,7 @@ class ResourceOperations:
     def combine_json(links):
         li = []
         for link in links:
+            print('working on: ' + link)
             quarterly_data = ResourceOperations.request_to_list(link)
             for i in quarterly_data:
                 li.append(i)
@@ -47,23 +46,9 @@ class ResourceOperations:
     #returns list of all links that begin substring "strip_string" stripped of the "stripstring"
     #output is a list of unique resource id links
     @staticmethod
-    def extract_unique_path(links, strip_string):
+    def extract_unique_path(links, strip_string, replace_string):
         li = []
         for link in links:
             if strip_string in link:
-                li.append(link.replace(strip_string, 'https://data.wprdc.org/api/3/action/datastore_search?resource_id='))
+                li.append(link.replace(strip_string, replace_string))
         return list(set(li))
-
-
-
-
-url = 'https://data.wprdc.org/dataset/healthyride-trip-data'
-resource_extension = '/dataset/healthyride-trip-data/resource/'
-
-
-list_of_links = ResourceOperations.list_of_links(url)
-overall = ResourceOperations.extract_unique_path(list_of_links, resource_extension)
-json_list = ResourceOperations.combine_json(overall)
-
-jsonStr = dumps(json_list)
-df = pd.read_json(jsonStr)
