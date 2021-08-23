@@ -2,37 +2,36 @@ from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 from urllib.request import urlopen
 import requests
-from json import dumps
+
 
 
 class Resources:
-
     def __init__(self, url, resource_extension, resource_calling_string):
         self.url = url
         self.resource_extension = resource_extension
         self.resource_calling_string = resource_calling_string
-
-        
-    def fill(self):
+ 
+    def create_json(self):
         #uses functions defined in "Resources" scrape web page for links, filter resource links
         #use resource links to call api, and dumps resource data into singular json
         list_of_links = self.list_of_links(self.url)
         overall = self.extract_unique_path(list_of_links, self.resource_extension, self.resource_calling_string)
         json_list = self.combine_json(overall)
-        jsonStr = dumps(json_list)
-        return jsonStr
+        return json_list
 
-    
     def request_to_list(self, link, limit):
     #calls api for data from resource, returns a list of dictionaries
     #(json format) containing the data. Returned data is limited to "limit" as specified
         limit_string = '&limit='+str(limit)
         json_dict = requests.get(link+limit_string).json()
         print('of length: ' + str(len(json_dict['result']['records'])))
-        return json_dict['result']['records']
+        if len(json_dict['result']['records']) > 20:
+            print('correct length')
+            return json_dict['result']['records']
+        else:
+            print('too short to add')
+            return []
 
-
-    
     def combine_json(self, links):
     #iterates through resource id's, calls API to retrive data, 
     #and combines all resources into one large JSON        
@@ -54,7 +53,6 @@ class Resources:
             links.append(link.get('href'))
         return links
 
-    
     def extract_unique_path(self, links, strip_string, replace_string):
     #returns list of all links that begin substring "strip_string" stripped of 
     #the "stripstring" output is a list of unique resource id links
@@ -63,3 +61,25 @@ class Resources:
             if strip_string in link:
                 li.append(link.replace(strip_string, replace_string))
         return list(set(li))
+
+
+class Trip:
+    def __init__(self, tripid, bikeid, toname, usertype, stoptime, 
+        fromname, starttime, toid, tripduration, _id, fromid):
+        self.tripid = tripid
+        self.bikeid = bikeid
+        self.toname = toname
+        self.usertype = usertype
+        self.stoptime = stoptime
+        self.fromname = fromname
+        self.starttime = starttime
+        self.toid = toid
+        self.tripduration = tripduration
+        self._id = _id
+        self.fromid = fromid
+    
+
+
+
+
+
