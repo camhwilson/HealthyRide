@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 from urllib.request import urlopen
 import requests
+from dateutil import parser
 
 
 
@@ -77,7 +78,22 @@ class Trip:
         self.tripduration = tripduration
         self._id = _id
         self.fromid = fromid
+        try:
+            self.weekday = self.datestr_to_daystr(starttime)
+        except:
+            print(tripid +' : trip id')
+            print(starttime + ' : startime')
     
+    def datestr_to_daystr(self, date):
+        try:
+            datetime_obj = parser.parse(date)
+            day_of_week = datetime_obj.weekday()
+            week_dict =  { 0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 
+            3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday' }
+            return week_dict[day_of_week]
+        except:
+            return 'invalid day'
+
 
 
 
