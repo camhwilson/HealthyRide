@@ -78,21 +78,19 @@ class Trip:
         self.tripduration = tripduration
         self._id = _id
         self.fromid = fromid
-        try:
-            self.weekday = self.datestr_to_daystr(starttime)
-        except:
-            print(tripid +' : trip id')
-            print(starttime + ' : startime')
+        self.weekday = self.datestr_to_dayint(starttime)
     
-    def datestr_to_daystr(self, date):
+    def datestr_to_dayint(self, date):
         try:
             datetime_obj = parser.parse(date)
-            day_of_week = datetime_obj.weekday()
-            week_dict =  { 0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 
-            3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday' }
-            return week_dict[day_of_week]
+            return datetime_obj.weekday()
         except:
-            return 'invalid day'
+            return 'missing date'
+    
+def dayint_to_daystr(day_of_week):
+    week_dict =  { 0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 
+        3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday' }
+    return week_dict[day_of_week]
 
 
 
