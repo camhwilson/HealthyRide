@@ -2,8 +2,6 @@ from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 from urllib.request import urlopen
 import requests
-from dateutil import parser
-
 
 
 class Resources:
@@ -64,33 +62,8 @@ class Resources:
         return list(set(li))
 
 
-class Trip:
-    def __init__(self, tripid, bikeid, toname, usertype, stoptime, 
-        fromname, starttime, toid, tripduration, _id, fromid):
-        self.tripid = tripid
-        self.bikeid = bikeid
-        self.toname = toname
-        self.usertype = usertype
-        self.stoptime = stoptime
-        self.fromname = fromname
-        self.starttime = starttime
-        self.toid = toid
-        self.tripduration = tripduration
-        self._id = _id
-        self.fromid = fromid
-        self.weekday = self.datestr_to_dayint(starttime)
-    
-    def datestr_to_dayint(self, date):
-        try:
-            datetime_obj = parser.parse(date)
-            return datetime_obj.weekday()
-        except:
-            return 'missing date'
-    
-def dayint_to_daystr(day_of_week):
-    week_dict =  { 0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 
-        3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday' }
-    return week_dict[day_of_week]
+
+
 
 
 
