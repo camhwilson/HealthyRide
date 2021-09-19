@@ -5,7 +5,8 @@ from collections import Counter
 import datetime
 import matplotlib.dates as mdates
 
-from trip_and_weekday import dayint_to_daystr
+
+from weekday_analytics.weekday import dayint_to_daystr
 
 def hourly_volume(li):
     hourly_list = sorted([int(i.split(':')[0]) for i in li])
