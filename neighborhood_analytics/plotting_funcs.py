@@ -23,10 +23,6 @@ def individual_plot(da, dd, ax, i):
     
     
     
-    
-    
-    
-    
     #plt.locator_params(axis='x', nbins=6)
     
     #listsa = sorted(da.items()) # sorted by key, return a list of tuples
