@@ -21,8 +21,6 @@ class Weekday:
         weekday_trip_dict = self.group_trip_list_by_weekday(Trip_list)  
         
         for key, val in weekday_trip_dict.items():
-            #print(key, len(filter_list_to_just_objects(val)[1]))
-
             return_hourly_values[key] = func(val)
         
         return return_hourly_values

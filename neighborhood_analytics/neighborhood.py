@@ -12,7 +12,7 @@ class Neighborhood:
             else:
                 return_dict[i.start_neighborhood].append(i)
         return return_dict
-
+    
     @classmethod
     def group_by_departure_neighborhood(self, Trip_list):
         return_dict = {}
@@ -30,7 +30,9 @@ class Neighborhood:
         neighborhood_by_arrivals = self.group_by_arrival_neighborhood(Trip_list)
 
         neighborhood_by_departures = self.group_by_departure_neighborhood(Trip_list)
-
+#these are created correctly, something occurs below
+        print(len(neighborhood_by_arrivals.keys()))
+        
         return_sorted_arrivals = {}
         for key, val in neighborhood_by_arrivals.items():
 

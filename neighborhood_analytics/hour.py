@@ -1,6 +1,8 @@
 from collections import Counter
 
 class Hour:
+    
+    ###############
     @classmethod
     def group_trip_list_by_arrival_hour(self, Trip_list):
         """function groups trip lists by hour of day"""
@@ -22,7 +24,7 @@ class Hour:
                 hourly_trip_dict[hour] += [i.end_neighborhood]
         
         return self.convert_hourly_trip_dict_to_counter(hourly_trip_dict)
-    
+    ############
     @classmethod
     def group_trip_list_by_departure_hour(self, Trip_list):
         """function groups trip lists by hour of day"""
@@ -41,7 +43,8 @@ class Hour:
             else:
                 hourly_trip_dict[hour] += [i.start_neighborhood]
         return self.convert_hourly_trip_dict_to_counter(hourly_trip_dict)
-    
+    #################
+
     @classmethod
     def convert_hourly_trip_dict_to_counter(self, hourly_trip_dict):
         counted_hourly_neighborhoods = {}
