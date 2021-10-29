@@ -43,6 +43,11 @@ def individual_plot(da, dd, ax, i):
     ax[i].xaxis.set_major_formatter(mdates.DateFormatter("%I"))
     
 
+
+
+
+    
+
 def plot_days_of_wk(weekday_object_list, neighborhood_str):
     
     weekday_object_list.sort(key=lambda x: x.weekday, reverse=True)
@@ -60,6 +65,10 @@ def plot_days_of_wk(weekday_object_list, neighborhood_str):
     fig.subplots_adjust(top=0.7)
     
     plt.show()
+
+
+
+
 
 def plot_all(neighborhood_weekday_dict):
     for key, val in neighborhood_weekday_dict.items():

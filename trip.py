@@ -125,7 +125,8 @@ class Trip:
             datetime_obj = parser.parse(date)
             return datetime_obj.weekday()
         except:
-            return 'missing date'
+            #do not want to include missing dates
+            return "missing date"
 
     def determine_neighborhood(self, search_param):
         for key, val in station_dict.items():
