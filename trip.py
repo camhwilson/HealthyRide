@@ -132,6 +132,6 @@ class Trip:
         for key, val in station_dict.items():
             if search_param in val:
                 return key
-        return 'Not a station in a defined neighborhood'
+        return 'Undefined'
 
 
