@@ -33,14 +33,15 @@ class Neighborhood:
 
 #these are created correctly, something occurs below
         return_sorted_arrivals = {}
+
         for key, val in neighborhood_by_arrivals.items():
-
             return_sorted_arrivals[key] = Weekday.create_hourly_dict_grouped_by_weeks(val, Hour.group_trip_list_by_arrival_hour)
-        
-        return_sorted_departures = {}
-        for key, val in neighborhood_by_departures.items():
 
+        return_sorted_departures = {}
+
+        for key, val in neighborhood_by_departures.items():
             return_sorted_departures[key] = Weekday.create_hourly_dict_grouped_by_weeks(val, Hour.group_trip_list_by_departure_hour)
+
         
         return return_sorted_departures, return_sorted_arrivals
 
