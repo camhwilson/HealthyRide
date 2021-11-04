@@ -1,69 +1,120 @@
-import matplotlib.pylab as plt
-from collections import Counter
 
-
-import datetime
-import matplotlib.dates as mdates
-
-
+import matplotlib.pyplot as plt
 from weekday_analytics.weekday import dayint_to_daystr
+import matplotlib.dates as mdates
+from neighborhood_analytics.neighborhood import Neighborhood
+from trip import Trip
+import datetime
+from collections import OrderedDict
 
-def hourly_volume(li):
-    hourly_list = sorted([int(i.split(':')[0]) for i in li])
-    counted_vals = Counter(hourly_list)
-    new_dict = {}
-    for key, val in counted_vals.items():
-        new_key = datetime.datetime.strptime(str(key),'%H')
-        new_dict[new_key] = val
-    return new_dict
+class Neighborhood_Plot:
 
-def individual_plot(da, dd, ax, i):
-    
-    
-    
-    
-    
-    #plt.locator_params(axis='x', nbins=6)
-    
-    #listsa = sorted(da.items()) # sorted by key, return a list of tuples
-    #listsd = sorted(dd.items()) # sorted by key, return a list of tuples
-    
-    #xa, ya = zip(*listsa) # unpack a list of pairs into two tuples
-    #xd, yd = zip(*listsd)
+    def __init__(self, Trip_list):
+        arrivals_by_neighborhood, departures_by_neighborhood = Neighborhood.sort_direction_neighborhood_weekday_hour(Trip_list)
 
-    
-    #ax[i].plot(xa, ya, "g-", label = 'Arrivals')
-    #ax[i].plot(xd, yd, 'r-', label = 'Departures')
-
-    ax[i].set_xlabel('Hour of Day')
-
-    ax[i].xaxis.set_major_locator(plt.MaxNLocator(6))
-
-    ax[i].title.set_text((dayint_to_daystr(i)))
+        self.tuple_dict = self.combine_dicts(arrivals_by_neighborhood, departures_by_neighborhood)       
 
 
-    if i == 0:
-        ax[i].set_ylabel('4-year Arrival Volume')
+    #function that zips two dictionaries by identical key
 
-    ax[i].xaxis.set_major_formatter(mdates.DateFormatter("%I"))
-    
+    def combine_dicts(self, arrival_dict, departure_dict):
+        #order matters, arrivals are first index of tuple, departures follow
+        return_dict = {}
+        for key in arrival_dict.keys():
+            return_dict[key] = (arrival_dict[key], departure_dict[key])
+        return return_dict
 
-def plot_days_of_wk(weekday_object_list, neighborhood_str, neighborhood_dict):
-    
-    weekday_object_list.sort(key=lambda x: x.weekday, reverse=True)
-    
-    fig, axs = plt.subplots(1, 7, figsize=(15,2.5), sharey = True)
-    fig.suptitle(neighborhood_str)
-    
-    for key, val in neighborhood_dict.items():
-        for i, val in enumerate(val):    
 
-    
-    #fig.legend(["Arrivals", "Departures"], bbox_to_anchor=(0.2, 1.1))
-    #fig.subplots_adjust(top=0.7)
-    
-    plt.show()
+    def make_keys_int(self, d):
+        return_dict = {}
+        for key in d.keys():
+            return_dict[int(key)] = d[key]
+        return return_dict
 
-def plot_all(neighborhood_weekday_dict):
-    for key, val in neighborhood_weekday_dict.items():
-        plot_days_of_wk(val, key)
+    def order_nested_dict(self, nested_dict):
+        return_dict = {}
+
+        for key, val in OrderedDict(sorted(nested_dict.items())).items():
+            nested_dict = self.make_keys_int(val)
+
+            return_dict[key] = OrderedDict(sorted(nested_dict.items()))
+        return return_dict
+
+
+
+    def plot_hours_of_day(self, ax, day_of_wk, daily_dict):
+        x = list(range(0, 24))
+
+        x = [datetime.datetime.strptime(str(i),'%H') for i in x]
+
+        for key, val in daily_dict.items():
+
+            ax[day_of_wk].title.set_text((dayint_to_daystr(day_of_wk)))
+
+            ax[day_of_wk].xaxis.set_major_locator(plt.MaxNLocator(6))
+            ax[day_of_wk].xaxis.set_major_formatter(mdates.DateFormatter("%I"))
+
+            ax[day_of_wk].plot(x, val)
+
+            ax[day_of_wk].set_xlabel('Hour of Day')
+            #ax.plot(x, val)
+
+        ax[0].set_ylabel('4-year Arrival/Departure Volume')
+
+
+
+    def return_arrival_daily_dict(self, ordered_arrivals, neighborhoods):
+        arrival_daily_dict = {}
+        for day, val in ordered_arrivals.items():
+            neighborhood_dict = {}
+            for key, val in val.items():       
+                for i in neighborhoods:
+                    if i not in neighborhood_dict.keys():
+                        neighborhood_dict[i] = [val[i]]
+                    else:
+                        neighborhood_dict[i] += [val[i]]
+            arrival_daily_dict[day] = neighborhood_dict
+        return arrival_daily_dict
+
+    def return_departure_daily_dict(self, ordered_departures, neighborhoods):    
+        departure_daily_dict = {}
+        for day, val in ordered_departures.items():
+            neighborhood_dict = {}
+            for key, val in val.items():       
+                for i in neighborhoods:
+                    if i not in neighborhood_dict.keys():
+                        neighborhood_dict[i] = [val[i]]
+                    else:
+                        neighborhood_dict[i] += [val[i]]
+            departure_daily_dict[day] = neighborhood_dict
+        return departure_daily_dict
+
+    def plot_daily_dict(self, direction_statement, neighborhood, daily_dict):
+        fig, axs = plt.subplots(1, 7, figsize=(20,3), sharey = True)
+
+        for key, val in daily_dict.items():
+        #note that at some point here arrivals are flipped with departures
+
+            self.plot_hours_of_day(axs, key, val)
+
+
+        fig.suptitle(direction_statement + ' ' + neighborhood)
+    ### changed from arrival_daily_dict[0]
+        fig.legend(daily_dict[0].keys(), bbox_to_anchor=(1, 0.84))
+
+        fig.subplots_adjust(top=0.8)
+
+    def main_plot(self):
+        neighborhoods = self.tuple_dict.keys()
+
+        for key, val in self.tuple_dict.items():
+            arrivals, departures = val
+
+            ordered_arrivals = self.order_nested_dict(arrivals)
+            ordered_departures = self.order_nested_dict(departures)
+
+            arrival_daily_dict = self.return_arrival_daily_dict(ordered_arrivals, neighborhoods)
+            departure_daily_dict = self.return_departure_daily_dict(ordered_departures, neighborhoods)
+
+            self.plot_daily_dict('Arrivals to', key, arrival_daily_dict)
+            self.plot_daily_dict('Departures from',  key, departure_daily_dict)
