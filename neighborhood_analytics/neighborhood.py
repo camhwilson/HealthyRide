@@ -1,3 +1,7 @@
+import sys
+
+sys.path.insert(0, '/Users/cwilson/desktop/programming/jupyter_tings/healthyride/healthyride/neighborhood_analytics')
+
 from hour import Hour
 from weekday import Weekday
 
