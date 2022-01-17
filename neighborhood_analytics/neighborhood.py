@@ -1,9 +1,9 @@
 import sys
 
-sys.path.insert(0, '/Users/cwilson/desktop/programming/jupyter_tings/healthyride/healthyride/neighborhood_analytics')
-
-from hour import Hour
-from weekday import Weekday
+#sys.path.insert(0, '/Users/cwilson/desktop/programming/jupyter_tings/healthyride/healthyride/neighborhood_analytics')
+sys.path.insert(0, 'C:\\Users\\chwilson\\OneDrive - Turner Construction\\Desktop\\HealthyRide')
+from neighborhood_analytics.hour import Hour
+from neighborhood_analytics.weekday import Weekday
 
 class Neighborhood:
     

@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 import sys
   
-sys.path.insert(0, '/Users/cwilson/desktop/programming/jupyter_tings/healthyride/healthyride')
-
+#sys.path.insert(0, '/Users/cwilson/desktop/programming/jupyter_tings/healthyride/healthyride')
+sys.path.insert(0, 'C:\\Users\\chwilson\\OneDrive - Turner Construction\\Desktop\\HealthyRide')
 from trip import Trip
 
 station_dict = {
