@@ -92,8 +92,8 @@ analytics.ipynb is where I feature all of the visualizations that support my pro
 1) Weekday Analytics - plots that display patterns of arrivals and departures by neighborhood
 ![Downtown Arrivals and Departures](/supporting_figures/downtown.png)
 2) Neighborhood Analytics - similar to Weekday Analytics but more complicated - plots that display patterns of arrivals and departures from and to neighborhoods
-![Downtown Arrivals by Neighborhood](supporting_figures\arrivals_to_downtown.png)
-![Downtown Departures by Neighborhood](supporting_figures\departures_from_downtown.png)
+![Downtown Arrivals by Neighborhood](/supporting_figures/arrivals_to_downtown.png)
+![Downtown Departures by Neighborhood](/supporting_figures/departures_from_downtown.png)
 You may notice that these visualizations correspond to folders in this repository. This is the way I have chosen to structure the repository. Folders within the main repository contain logic that is specific to a visualization. Files that exist outside these folders are there for a reason-  they apply across visualizations.
 
 # <em> If you want to contribute </em>
